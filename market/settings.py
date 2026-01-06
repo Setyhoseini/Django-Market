@@ -46,9 +46,34 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
+    # your other rest framework settings (keep them)
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    # Use drf-spectacular as the default schema generator
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Market / Homework 2 API',
+    'DESCRIPTION': 'API documentation for the market app (assignments: announcements, requests, tickets, comments).',
+    'VERSION': '1.0.0',
+    # Configure token auth for the Swagger UI "Authorize" button
+    'COMPONENTS': {
+        'securitySchemes': {
+            'TokenAuth': {                # name used internally
+                'type': 'apiKey',
+                'in': 'header',
+                'name': 'Authorization', # you will write: Authorization: Token <token>
+            }
+        }
+    },
+    # Apply the TokenAuth globally (so requests in the UI can use it)
+    'SECURITY': [{'TokenAuth': []}],
 }
 
 MIDDLEWARE = [
@@ -134,5 +159,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'core.User'
+# AUTH_USER_MODEL = 'core.User'
 
